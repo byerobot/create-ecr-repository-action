@@ -4,13 +4,14 @@ import {
   DescribeRepositoriesCommand,
   CreateRepositoryCommand,
   PutLifecyclePolicyCommand,
-  Repository,
+  Repository, SetRepositoryPolicyCommand,
 } from '@aws-sdk/client-ecr'
 import { promises as fs } from 'fs'
 
 type Inputs = {
   repository: string
   lifecyclePolicy?: string
+  repositoryPolicy?: string
 }
 
 type Outputs = {
@@ -33,6 +34,14 @@ export const runForECR = async (inputs: Inputs): Promise<Outputs> => {
     await core.group(
       `Put the lifecycle policy to repository ${inputs.repository}`,
       async () => await putLifecyclePolicy(client, inputs.repository, lifecyclePolicy)
+    )
+  }
+
+  const repositoryPolicy = inputs.repositoryPolicy
+  if (repositoryPolicy !== undefined) {
+    await core.group(
+      `Put the repository policy to repository ${inputs.repository}`,
+      async () => await setRepositoryPolicy(client, inputs.repository, repositoryPolicy)
     )
   }
   return {
@@ -80,4 +89,13 @@ const putLifecyclePolicy = async (client: ECRClient, repositoryName: string, pat
 
   await client.send(new PutLifecyclePolicyCommand({ repositoryName, lifecyclePolicyText }))
   core.info(`successfully put lifecycle policy ${path} to repository ${repositoryName}`)
+}
+
+const setRepositoryPolicy = async (client: ECRClient, repositoryName: string, path:string): Promise<void> => {
+  const policyText = await fs.readFile(path, { encoding: 'utf-8' })
+  core.debug(`putting the repository policy ${path} to repository ${repositoryName}`)
+  await client.send(new SetRepositoryPolicyCommand({
+    repositoryName, policyText
+  }))
+  core.info(`successfully put repository policy ${path} to repository ${repositoryName}`)
 }
