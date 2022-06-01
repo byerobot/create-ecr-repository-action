@@ -1,7 +1,7 @@
-# create-ecr-repository-action [![ts](https://github.com/int128/create-ecr-repository-action/actions/workflows/ts.yml/badge.svg)](https://github.com/int128/create-ecr-repository-action/actions/workflows/ts.yml)
+# create-ecr-repository-action
 
-This is a GitHub Action to create a repository into Amazon ECR or ECR Public registry if it does not exist.
-It can put a lifecycle policy to the repository for cost saving.
+This is a GitHub Action to create a repository in Amazon ECR if it does not exist.
+It can also set a lifecycle policy for the repository for cost saving.
 
 
 ## Getting Started
@@ -12,7 +12,7 @@ To create a repository:
 jobs:
   build:
     steps:
-      - uses: int128/create-ecr-repository-action@v1
+      - uses: byerobot/create-ecr-repository-action@v1
         with:
           repository: hello-world
 ```
@@ -20,33 +20,18 @@ jobs:
 If the repository exists, this action does nothing.
 
 
-### Put a lifecycle policy
+### Set a lifecycle policy
 
 To create a repository with a lifecycle policy:
 
 ```yaml
-      - uses: int128/create-ecr-repository-action@v1
+      - uses: byerobot/create-ecr-repository-action@v1
         with:
           repository: hello-world
           lifecycle-policy: config/lifecycle-policy.json
 ```
 
-If the repository exists, this action just puts the lifecycle policy.
-
-
-### Create into ECR Public
-
-To create a repository into ECR Public registry:
-
-```yaml
-      - uses: int128/create-ecr-repository-action@v1
-        with:
-          repository: hello-world
-          public: true
-```
-
-If the repository exists, this action does nothing.
-Note that currently ECR Public does not support the lifecycle polocy.
+If the repository exists, this action just sets the lifecycle policy.
 
 
 ### Full example
@@ -60,7 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: aws-actions/amazon-ecr-login@v1
-      - uses: int128/create-ecr-repository-action@v1
+      - uses: byerobot/create-ecr-repository-action@v1
         id: ecr
         with:
           repository: hello-world
@@ -76,7 +61,6 @@ Do not use `main` branch because it does not contain `dist` files.
 
 | Name | Default | Description
 |------|---------|------------
-| `public` | `false` | Set `true` to create into ECR Public registry
 | `repository` | (required) | Repository name to create
 | `lifecycle-policy` | - | Path to a file of lifecycle policy for the repository
 
@@ -85,4 +69,4 @@ Do not use `main` branch because it does not contain `dist` files.
 
 | Name | Description
 |------|------------
-| `repository-uri` | URI of the repository (in form of `ACCOUNT.dkr.ecr.REGION.amazonaws.com/NAME` or `public.ecr.aws/ID/NAME`)
+| `repository-uri` | URI of the repository (in form of `ACCOUNT.dkr.ecr.REGION.amazonaws.com/NAME`)
