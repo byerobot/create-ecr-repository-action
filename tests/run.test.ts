@@ -28,9 +28,13 @@ test('ecr', async () => {
   mocks.ecr.on(ecr.PutLifecyclePolicyCommand).resolves({
     repositoryName: 'foobar',
   })
+  mocks.ecr.on(ecr.SetRepositoryPolicyCommand).resolves({
+    repositoryName: 'foobar'
+  })
   await run({
     repository: 'foo/bar',
     lifecyclePolicy: `${__dirname}/fixtures/lifecycle-policy.json`,
+    repositoryPolicy: `${__dirname}/fixtures/repository-policy.json`,
   })
   expect(setOutputMock).toBeCalledWith('repository-uri', '123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/foobar')
 })
