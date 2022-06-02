@@ -29,7 +29,7 @@ test('ecr', async () => {
     repositoryName: 'foobar',
   })
   mocks.ecr.on(ecr.SetRepositoryPolicyCommand).resolves({
-    repositoryName: 'foobar'
+    repositoryName: 'foobar',
   })
   await run({
     repository: 'foo/bar',

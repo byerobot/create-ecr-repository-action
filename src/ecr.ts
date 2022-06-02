@@ -4,7 +4,8 @@ import {
   DescribeRepositoriesCommand,
   CreateRepositoryCommand,
   PutLifecyclePolicyCommand,
-  Repository, SetRepositoryPolicyCommand,
+  Repository,
+  SetRepositoryPolicyCommand,
 } from '@aws-sdk/client-ecr'
 
 type Inputs = {
@@ -82,7 +83,11 @@ const createRepositoryIfNotExist = async (client: ECRClient, name: string): Prom
 
 const isRepositoryNotFoundException = (e: unknown) => e instanceof Error && e.name === 'RepositoryNotFoundException'
 
-const putLifecyclePolicy = async (client: ECRClient, repositoryName: string, lifecyclePolicyText: string): Promise<void> => {
+const putLifecyclePolicy = async (
+  client: ECRClient,
+  repositoryName: string,
+  lifecyclePolicyText: string
+): Promise<void> => {
   core.debug(`putting the lifecycle policy to repository ${repositoryName}`)
 
   await client.send(new PutLifecyclePolicyCommand({ repositoryName, lifecyclePolicyText }))
@@ -91,8 +96,11 @@ const putLifecyclePolicy = async (client: ECRClient, repositoryName: string, lif
 
 const setRepositoryPolicy = async (client: ECRClient, repositoryName: string, policyText: string): Promise<void> => {
   core.debug(`putting the repository policy ${policyText} to repository ${repositoryName}`)
-  await client.send(new SetRepositoryPolicyCommand({
-    repositoryName, policyText
-  }))
+  await client.send(
+    new SetRepositoryPolicyCommand({
+      repositoryName,
+      policyText,
+    })
+  )
   core.info(`successfully put repository policy to repository ${repositoryName}`)
 }
