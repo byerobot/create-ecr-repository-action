@@ -28,10 +28,23 @@ To create a repository with a lifecycle policy:
       - uses: byerobot/create-ecr-repository-action@v1
         with:
           repository: hello-world
-          lifecycle-policy: config/lifecycle-policy.json
+          lifecycle-policy: '{ "fake": "policy" }'
 ```
 
 If the repository exists, this action just sets the lifecycle policy.
+
+### Set a repository policy
+
+To create a repository with a repository policy:
+
+```yaml
+      - uses: byerobot/create-ecr-repository-action@v1
+        with:
+          repository: hello-world
+          repository-policy: '{ "fake": "policy" }'
+```
+
+If the repository exists, this action just sets the repository policy.
 
 
 ### Full example
@@ -59,10 +72,11 @@ Do not use `main` branch because it does not contain `dist` files.
 
 ## Inputs
 
-| Name | Default | Description
-|------|---------|------------
-| `repository` | (required) | Repository name to create
-| `lifecycle-policy` | - | Path to a file of lifecycle policy for the repository
+| Name                | Default | Description
+|---------------------|---------|------------
+| `repository`        | (required) | Repository name to create
+| `lifecycle-policy`  | - | JSON lifecycle policy for the repository
+| `repository-policy` | - | JSON repository policy for the repository
 
 
 ## Outputs

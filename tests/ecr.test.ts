@@ -76,21 +76,8 @@ describe('Put a lifecycle policy', () => {
 
     const output = await runForECR({
       repository: 'foobar',
-      lifecyclePolicy: `${__dirname}/fixtures/lifecycle-policy.json`,
+      lifecyclePolicy: `{ "rules": [{ "description": "dummy" }] }`,
     })
     expect(output.repositoryUri).toBe('123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/foobar')
-  })
-
-  test('file not exist', async () => {
-    ecrMock.on(DescribeRepositoriesCommand).resolves({
-      repositories: [
-        {
-          repositoryName: 'foobar',
-          repositoryUri: '123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/foobar',
-        },
-      ],
-    })
-
-    await expect(runForECR({ repository: 'foobar', lifecyclePolicy: 'wrong-path' })).rejects.toThrowError()
   })
 })

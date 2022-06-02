@@ -10,9 +10,12 @@ inputs:
   repository:
     required: true
     description: repository name to create
+  repository-policy:
+    required: false
+    description: JSON repository policy to apply (optional)
   lifecycle-policy:
     required: false
-    description: path to lifecycle policy file of the repository (optional)
+    description: JSON lifecycle policy to apply to the repository (optional)
 
 outputs:
   repository-uri:
