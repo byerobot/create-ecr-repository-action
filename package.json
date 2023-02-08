@@ -24,7 +24,7 @@
   "author": "byerobot",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "1.8.2",
+    "@actions/core": "^1.10",
     "@aws-sdk/client-ecr": "3.100.0"
   },
   "devDependencies": {
