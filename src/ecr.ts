@@ -23,7 +23,7 @@ export const runForECR = async (inputs: Inputs): Promise<Outputs> => {
 
   const repository = await core.group(
     `Create repository ${inputs.repository} if not exist`,
-    async () => await createRepositoryIfNotExist(client, inputs.repository)
+    async () => await createRepositoryIfNotExist(client, inputs.repository),
   )
   if (repository.repositoryUri === undefined) {
     throw new Error('unexpected response: repositoryUri === undefined')
@@ -33,7 +33,7 @@ export const runForECR = async (inputs: Inputs): Promise<Outputs> => {
   if (lifecyclePolicy !== undefined) {
     await core.group(
       `Put the lifecycle policy to repository ${inputs.repository}`,
-      async () => await putLifecyclePolicy(client, inputs.repository, lifecyclePolicy)
+      async () => await putLifecyclePolicy(client, inputs.repository, lifecyclePolicy),
     )
   }
 
@@ -41,7 +41,7 @@ export const runForECR = async (inputs: Inputs): Promise<Outputs> => {
   if (repositoryPolicy !== undefined) {
     await core.group(
       `Put the repository policy to repository ${inputs.repository}`,
-      async () => await setRepositoryPolicy(client, inputs.repository, repositoryPolicy)
+      async () => await setRepositoryPolicy(client, inputs.repository, repositoryPolicy),
     )
   }
   return {
@@ -86,7 +86,7 @@ const isRepositoryNotFoundException = (e: unknown) => e instanceof Error && e.na
 const putLifecyclePolicy = async (
   client: ECRClient,
   repositoryName: string,
-  lifecyclePolicyText: string
+  lifecyclePolicyText: string,
 ): Promise<void> => {
   core.debug(`putting the lifecycle policy to repository ${repositoryName}`)
 
@@ -100,7 +100,7 @@ const setRepositoryPolicy = async (client: ECRClient, repositoryName: string, po
     new SetRepositoryPolicyCommand({
       repositoryName,
       policyText,
-    })
+    }),
   )
   core.info(`successfully put repository policy to repository ${repositoryName}`)
 }
